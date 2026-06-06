@@ -64,6 +64,12 @@ function App(){
  const monOn=(a)=>mon<0||viewEdges.some(e=>e.f===a||e.t===a);
  const eCol=(k)=>k==="treasury"?"var(--treasury)":k==="internal"?"var(--internal)":(k.includes("known_ext")&&!k.includes("unknown")?"var(--reg)":"var(--unreg)");
  const eDash=(k)=>k==="treasury"?"1 5":(k==="internal"?"3 4":"0");
+ const isUnk=(a)=>{const n=byA[a]; if(!n) return false; return n.status==="held"||(n.status==="name"&&!rname(a));};
+ const isTre=(a)=>{const n=byA[a]; return !!(n&&n.tag==="treasury");};
+ const eColor=(e)=>(isTre(e.f)||isTre(e.t))?"var(--treasury)":((isUnk(e.f)||isUnk(e.t))?"var(--unreg)":"var(--reg)");
+ const eDashE=(e)=>(isTre(e.f)||isTre(e.t))?"1 5":((layout.internalIds.has(e.f)&&layout.internalIds.has(e.t))?"3 4":"0");
+ const eOpac=(e)=>{if(isTre(e.f)||isTre(e.t))return 0.4; if(isUnk(e.f)||isUnk(e.t))return 0.55; if(layout.internalIds.has(e.f)&&layout.internalIds.has(e.t))return 0.24; return 0.42;};
+ const nodeColor=(n)=>isUnk(n.a)?"var(--unreg)":(n.tag==="treasury"?"var(--treasury)":"var(--reg)");
  const path=(e)=>{const a=layout.pos[e.f],b=layout.pos[e.t];if(!a||!b)return null;const both=layout.internalIds.has(e.f)&&layout.internalIds.has(e.t);let c1,c2;if(both){const o=90+Math.abs(a.y-b.y)*0.25;c1=a.x-o;c2=b.x-o;}else{c1=a.x+(b.x-a.x)*0.45;c2=a.x+(b.x-a.x)*0.55;}return "M "+a.x+" "+a.y+" C "+c1+" "+a.y+", "+c2+" "+b.y+", "+b.x+" "+b.y;};
  const conn=(e)=>sel&&(e.f===sel||e.t===sel);
  const nodeOn=(a)=>{if(!sel)return true;if(a===sel)return true;return viewEdges.some(e=>(e.f===sel&&e.t===a)||(e.t===sel&&e.f===a));};
@@ -110,15 +116,15 @@ function App(){
       <text x={layout.W/2} y={30} textAnchor="middle" fontSize="10.5" fontWeight="600" fill="var(--owned)">KNOWN SET (ours)</text>
       <text x={layout.W-150} y={30} textAnchor="middle" fontSize="10.5" fontWeight="600" fill="var(--muted)">→ PAYMENTS / OUTFLOW</text>
       {viewEdges.map((e,i)=>{const d=path(e);if(!d)return null;const on=!sel||conn(e);
-       return <path key={i} d={d} fill="none" stroke={eCol(e.k)} strokeWidth={sw(e.v)} strokeOpacity={on?(sel?0.6:(e.k==="treasury"?0.5:0.38)):0.05} strokeDasharray={eDash(e.k)} strokeLinecap="round"/>;})}
+       return <path key={i} d={d} fill="none" stroke={eColor(e)} strokeWidth={sw(e.v)} strokeOpacity={on?(sel?0.7:eOpac(e)):0.05} strokeDasharray={eDashE(e)} strokeLinecap="round"/>;})}
       {M.mapnodes.map(n=>{const p=layout.pos[n.a];if(!p)return null;const isInt=layout.internalIds.has(n.a);const on=nodeOn(n.a);
-       const nm=rname(n.a); const isUnknown=n.status==="name"&&!nm; const labelLeft=p.x>layout.W/2; const disp=nm?trunc(nm,18):short(n.a);
+       const nm=rname(n.a); const isUnknown=isUnk(n.a); const labelLeft=p.x>layout.W/2; const disp=nm?trunc(nm,18):short(n.a);
        return (<g key={n.a} opacity={(on&&monOn(n.a))?1:0.16} style={{cursor:"pointer"}}
          onMouseEnter={(ev)=>{setHover(n.a);setPos({x:ev.clientX,y:ev.clientY});}}
          onMouseMove={(ev)=>setPos({x:ev.clientX,y:ev.clientY})} onMouseLeave={()=>setHover(null)}
          onClick={(ev)=>{ev.stopPropagation();setSel(sel===n.a?null:n.a);const t=byA[n.a]&&byA[n.a].status;if(t)setTab(t);}}>
-        {isInt?<rect x={p.x-8} y={p.y-8} width={16} height={16} rx={4} fill={tagColor[n.tag]} stroke={sel===n.a?"#111":"none"} strokeWidth={2}/>
-         :<circle cx={p.x} cy={p.y} r={7} fill="#fff" stroke={tagColor[n.tag]} strokeWidth={2.4} strokeDasharray={isUnknown?"2 2":"0"}/>}
+        {isInt?<rect x={p.x-8} y={p.y-8} width={16} height={16} rx={4} fill={nodeColor(n)} stroke={sel===n.a?"#111":"none"} strokeWidth={2}/>
+         :<circle cx={p.x} cy={p.y} r={7} fill="#fff" stroke={nodeColor(n)} strokeWidth={2.4} strokeDasharray={isUnknown?"2 2":"0"}/>}
         <text x={isInt?p.x:(labelLeft?p.x+12:p.x-12)} y={isInt?p.y-13:p.y+3.5} textAnchor={isInt?"middle":(labelLeft?"start":"end")}
           fontFamily={nm?"IBM Plex Sans":"IBM Plex Mono"} fontSize="9.5" fill={isUnknown?"var(--unreg)":(n.tag==="treasury"?"var(--treasury)":"var(--ink)")} fontWeight={isUnknown?600:(isInt?500:400)}>{disp}</text>
        </g>);})}
@@ -126,8 +132,8 @@ function App(){
     </div>
     <TimeBar months={M.months} monthly={M.monthly} mon={mon} setMon={setMon} playing={playing} setPlaying={setPlaying}/>
     <div style={{display:"flex",gap:13,flexWrap:"wrap",margin:"10px 2px 0",fontSize:11,color:"var(--muted)"}}>
-     <Leg c="var(--owned)" sq>owned</Leg><Leg c="var(--treasury)" sq>treasury (excl.)</Leg><Leg c="var(--personal)" sq>personal</Leg><Leg c="var(--held)" sq>held</Leg>
-     <Leg c="var(--reg)">identified</Leg><Leg c="var(--unreg)">needs a name</Leg>
+     <Leg c="var(--reg)" sq>known (ours)</Leg><Leg c="var(--reg)">known party</Leg><Leg c="var(--treasury)" sq>treasury (excl.)</Leg><Leg c="var(--unreg)">unknown</Leg>
+     <span style={{color:"var(--reg)"}}>green line = both ends known</span><span style={{color:"var(--unreg)"}}>amber line = one end unknown</span>
     </div>
    </div>
 
