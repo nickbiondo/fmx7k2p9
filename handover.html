@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>ZeroX / ST0x — Wallet Register Handover</title>
+<style>
+:root{--ink:#1f2d27;--mut:#5c6b63;--line:#e4e0d6;--bg:#faf8f3;--accent:#1f3a2e;--amber:#b26b00;--green:#1f7a3d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55;font-size:15px}
+.wrap{max-width:880px;margin:0 auto;padding:48px 28px 80px}
+h1{font-size:26px;margin:0 0 4px}h2{font-size:18px;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.sub{color:var(--mut);font-size:13px;margin-bottom:8px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.5px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--accent);color:#fff;font-weight:600}
+.amber{color:var(--amber)}.green{color:var(--green)}
+.box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:12px 0}
+a{color:var(--accent)}ul{margin:8px 0 8px 0;padding-left:20px}li{margin:3px 0}
+.k{font-weight:600}
+.foot{margin-top:40px;color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+</style></head><body><div class="wrap">
+
+<h1>ZeroX / ST0x — Wallet Register Handover</h1>
+<div class="sub">For the accounting team (Tom Fleming, JHW Azoth · Count) &nbsp;·&nbsp; Period: 16 months to 31 December 2025 (FRS 102 s1A) &nbsp;·&nbsp; Prepared from full on-chain trace</div>
+
+<div class="box"><span class="k">Source of truth:</span> the wallet register (<span class="mono">ZeroX_wallet_register_LOCKED.xlsx</span>) and the live map below. The register regenerates the workbook in one command, so the spreadsheet is an export of the underlying data, not a hand-keyed copy.<br>
+&nbsp;·&nbsp; Workbook: <a href="ZeroX_wallet_register_LOCKED.xlsx">ZeroX_wallet_register_LOCKED.xlsx</a><br>
+&nbsp;·&nbsp; Interactive map: <a href="./">nickbiondo.github.io/fmx7k2p9</a></div>
+
+<h2>1. What this is and how it was built</h2>
+<p>Every wallet controlled by, or transacting with, the group was traced on-chain across <span class="k">Ethereum, Base and Arbitrum</span> using Blockscout, then cross-referenced against (a) the team's Telegram payment confirmations and (b) Count's posted Xero subscriber set. Each wallet is named, classified into an accounting bucket, and carries a note explaining its role. On the Ethereum and Base perimeter, <span class="k">99.79%</span> of all stablecoin movement is identified; the residual is sub-threshold dust.</p>
+
+<h2>2. The workbook, tab by tab</h2>
+<table>
+<tr><th>Tab</th><th>What it holds</th></tr>
+<tr><td class="k">Wallet Register</td><td>Every wallet: address, name, entity, accounting bucket, in/out (Ethereum + Base), and a note. Colour-coded by bucket.</td></tr>
+<tr><td class="k">Buckets</td><td>Totals by bucket: internal/own, registered counterparties, own rails (exchange/bridge/DeFi), treasury, and unregistered dust.</td></tr>
+<tr><td class="k">Investor Reconciliation</td><td>Each subscriber across three sources — on-chain, Count's 951 set, and the founder's master list — with a status flag on each line.</td></tr>
+<tr><td class="k">Arbitrum FY25</td><td>The cross-chain payroll that sat outside the original Ethereum/Base trace. Group→CEH funding, CEH→team fan-out, and the mainnet top-up.</td></tr>
+<tr><td class="k">Open Items</td><td>The action list, each routed to an owner.</td></tr>
+</table>
+
+<h2>3. Accounting treatment by bucket</h2>
+<ul>
+<li><span class="k">Internal / own</span> — group operating wallets. Intra-group movement; not income or expense.</li>
+<li><span class="k">Registered counterparties</span> — named investors (share premium / SAFT) and suppliers.</li>
+<li><span class="k">Own rails (exchange / bridge / DeFi)</span> — Kraken, Gemini, LI.FI, Uniswap, Aave, MayanCircle, Permit2 etc. Pass-through infrastructure; <span class="k">excluded</span> (funds are the group's own, routing).</li>
+<li><span class="k">Treasury / liquidity</span> — Safes and BitGo. <span class="k">Excluded</span> from P&L.</li>
+<li><span class="k">Unregistered</span> — sub-threshold dust/fees only. Immaterial.</li>
+</ul>
+
+<h2>4. Subscriber capital (investor inflows)</h2>
+<p>Identified crypto subscriptions total <span class="k">~$1.78m</span> and tie to Count's 951 Share Premium set. All crypto subscribers are named. Note the following:</p>
+<ul>
+<li><span class="amber k">Six fiat ASAs (~$112k)</span> — Hoyland $33k, Vantage Alpha $30k, CTRL-H $15k, Spitzform $12.5k, Schoofs $11.75k, Middleton $10k — were paid by <span class="k">bank wire</span>, so they correctly do not appear on-chain. Reconcile against the Revolut statement and confirm posted. Vantage Alpha is email-only (no agreement reference) and should be verified.</li>
+<li><span class="k">Robbert-Paul Ferket (RPF)</span> — cash received is $26,500; the further $90k "combined" and $25k commission are non-cash (warrant/ASA), so no cash should be expected for those.</li>
+<li><span class="k">ultrahd.eth $3,000</span> — paid into the Operational Hub, not a raise wallet. Treat as other income / refund, not share premium.</li>
+<li><span class="k">Mark Heus / K&Co</span> — December tranches need date/leg alignment; amounts reconcile in aggregate.</li>
+</ul>
+
+<h2>5. Cross-chain payroll — Arbitrum (material, please read)</h2>
+<p>The original perimeter covered Ethereum and Base. A subsequent sweep found that team and developer <span class="k">payroll ran on Arbitrum</span> through the CEH / Rain wallet (<span class="mono">0xf1303e…72B9</span>), which acted as a distribution hub.</p>
+<table>
+<tr><th>Item</th><th>Amount</th><th>Treatment</th></tr>
+<tr><td>Group → CEH on Arbitrum (Feb–Sep 2025, 9 transfers from W3/W4)</td><td class="k">$318,000</td><td>Dev / payroll expense, in-period FY25</td></tr>
+<tr><td>CEH → 15 team/contractor wallets (distribution of the above)</td><td>$342k</td><td>Supporting detail; expense is the funding leg</td></tr>
+<tr><td>CEH on Ethereum mainnet (Oct–Dec 2025)</td><td>$60,000</td><td>Already in the eth/base figures</td></tr>
+<tr><td class="k">CEH true group cost</td><td class="k">~$378,000</td><td>vs $60k previously visible</td></tr>
+</table>
+<div class="box"><span class="amber k">Action:</span> the $318k Arbitrum payroll is a <span class="k">material FY25 expense not in the accounts locked on 9 June</span>. It needs booking and the FY25 figure revisiting. The CEH invoice (011) is addressed to <span class="k">ST0x BVI Ltd</span>, so consider the correct entity and any intercompany treatment, as the funding wallets are ZeroX Ltd.</div>
+<p><span class="k">Scope note:</span> separately, ~$29m of Arbitrum stablecoin volume is dated 2026 and is the group's own trading, market-making and bridge activity. That is <span class="k">post-period (FY26)</span> and own infrastructure — deliberately excluded from these FY25 accounts and flagged for a separate FY26 sweep.</p>
+
+<h2>6. Director / founder wallets</h2>
+<p>Two wallets (<span class="mono">0xcf2961…</span> and <span class="mono">0x1eadcb…</span>) are Nick's own, used to pay people (contractors/team). Outflows are company expenses settled personally (DLA credit to Nick) or personal spend, and need splitting on that basis.</p>
+
+<h2>7. Open items</h2>
+<table>
+<tr><th>#</th><th>Item</th><th>Action</th><th>Owner</th></tr>
+<tr><td>1</td><td>Arbitrum payroll via CEH — $318k (FY25)</td><td>Book as dev/payroll; reconcile CEH to ~$378k; revisit locked FY25 figure</td><td>Tom Fleming</td></tr>
+<tr><td>2</td><td>Six fiat ASAs (~$112k)</td><td>Reconcile vs Revolut; confirm posted (verify Vantage Alpha)</td><td>Count</td></tr>
+<tr><td>3</td><td>Mark Heus / K&Co December tranches</td><td>Align dates and legs</td><td>Count</td></tr>
+<tr><td>4</td><td>Sean $150k W4 April leg</td><td>Confirm on-chain source wallet</td><td>Count</td></tr>
+<tr><td>5</td><td>ultrahd.eth $3,000</td><td>Book as other income, not share premium</td><td>Count</td></tr>
+<tr><td>6</td><td>Nick wallets</td><td>Split outflows DLA vs company expense</td><td>Tom Fleming</td></tr>
+<tr><td>7</td><td>2026 Arbitrum trading (~$29m)</td><td>FY26 — exclude here; sweep separately</td><td>Count / Nick</td></tr>
+<tr><td>8</td><td>Address-poisoning on CEH/Arbitrum wallets</td><td>Use addresses from invoice/address book only; verify first and last 8 characters before every send</td><td>DA / Dave</td></tr>
+</table>
+
+<h2>8. Provenance and caveats</h2>
+<ul>
+<li>Figures are on-chain stablecoin movements (USDC, USDC.e, USDT, DAI) verified via Blockscout, cross-checked to Telegram timestamps to the minute.</li>
+<li>Ethereum + Base perimeter is complete (99.79% identified). Arbitrum is folded in as its own clearly-scoped layer.</li>
+<li><span class="k">Caveat:</span> the busy operating wallets carry heavy 2026 Arbitrum traffic; their full 2025 history was confirmed from the recipient side (CEH captured complete, so $318k is exact). A deep-pull of those wallets' 2025 history would be the belt-and-braces confirmation if required.</li>
+<li>Security warning: the CEH/Arbitrum wallets are under sustained address-poisoning. Lookalike addresses mirror real payments within minutes. See open item 8.</li>
+</ul>
+
+<div class="foot">Generated from the locked wallet register. Workbook: <span class="mono">ZeroX_wallet_register_LOCKED.xlsx</span> · Map: nickbiondo.github.io/fmx7k2p9 · This document is the accounting handover companion to the register.</div>
+</div></body></html>
